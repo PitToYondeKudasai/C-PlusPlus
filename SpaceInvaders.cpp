@@ -5,7 +5,7 @@
 #define WALL '#'
 #define PLAYER '='
 #define LASER '*'
-#define ENEMY 'O' 
+#define ENEMY 'O'
 #define EMPTY ' '
 
 bool gameOver;
@@ -70,7 +70,7 @@ class Character{
         void destroy_by_ref(bool & destroyed){
             destroyed = true;
         }
-    
+
         void move_right(){
             if ((x + 1) < width){
                 x_old = x;
@@ -121,13 +121,6 @@ class Character{
             mvaddch(y, x, PLAYER);
             mvaddch(y_old, x_old, EMPTY);
 
-            for(laser_beam las : lasers){
-                if(las.y_laser != 0)
-                    mvaddch(las.y_laser, las.x_laser, LASER);
-                if(las.y_laser + 1 != 0)
-                    mvaddch((las.y_laser + 1), las.x_laser, EMPTY);
-            }
-
             for(enemy en : enemies){
                 if(en.destroyed){
                     mvaddch(en.y_enemy, en.x_enemy, EMPTY);
@@ -135,7 +128,14 @@ class Character{
                     mvaddch(en.y_enemy, en.x_enemy, ENEMY);
                 }
             }
-            
+
+            for(laser_beam las : lasers){
+                if(las.y_laser != 0)
+                    mvaddch(las.y_laser, las.x_laser, LASER);
+                if(las.y_laser + 1 != 0)
+                    mvaddch((las.y_laser + 1), las.x_laser, EMPTY);
+            }
+
             mvprintw(22, 15, "%d",score);
             move(y, x);
         }
@@ -183,14 +183,14 @@ int main(){
     draw_window(0, 0);
     spaceship.draw();
     int ch;
-    
+
     while(!gameOver){
         timeout(100);
         spaceship.update();
         spaceship.draw();
         refresh();
     }
-    endwin(); // Close the curses window 
+    endwin(); // Close the curses window
 
     return 0;
 }
